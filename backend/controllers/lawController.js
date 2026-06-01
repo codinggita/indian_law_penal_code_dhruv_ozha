@@ -23,10 +23,28 @@ exports.createLaw = async (req, res) => {
 // @access  Public
 exports.getLaws = async (req, res) => {
   try {
-    const laws = await Law.find();
+    // Pagination
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 20;
+    const skip = (page - 1) * limit;
+
+    const laws = await Law.find().skip(skip).limit(limit);
+
+    // Pagination result
+    const total = await Law.countDocuments();
+    const pagination = {};
+
+    if (skip + limit < total) {
+      pagination.next = { page: page + 1, limit };
+    }
+    if (skip > 0) {
+      pagination.prev = { page: page - 1, limit };
+    }
+
     res.status(200).json({
       success: true,
       count: laws.length,
+      pagination,
       data: laws
     });
   } catch (error) {
