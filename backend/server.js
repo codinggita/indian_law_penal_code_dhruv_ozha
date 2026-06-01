@@ -11,6 +11,7 @@ connectDB();
 
 // Route files
 const lawRoutes = require('./routes/lawRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cors());
 
 // Mount routers
 app.use('/api/v1/laws', lawRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 // Basic health-check route to verify server status
 app.get('/api/v1/health', (req, res) => {
