@@ -152,8 +152,8 @@ This project is currently being developed over a comprehensive **23-Part Journey
 - [x] **Part 13:** Advanced Combination Queries
 - [x] **Part 14:** Authentication Setup & Models
 - [x] **Part 15:** Basic Auth APIs
-- [ ] **Part 16:** Advanced Auth APIs
-- [ ] **Part 17:** Middleware Practice Implementation
+- [x] **Part 16:** Advanced Auth APIs
+- [x] **Part 17:** Middleware Practice Implementation
 - [ ] **Part 18:** Admin Routes
 - [ ] **Part 19:** Analytics & Statistics
 - [ ] **Part 20:** Request Validation & Error Handling
