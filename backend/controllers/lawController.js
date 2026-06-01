@@ -23,7 +23,20 @@ exports.createLaw = async (req, res) => {
 // @access  Public
 exports.getLaws = async (req, res) => {
   try {
-    let query = Law.find();
+    let queryObj = {};
+
+    // Search
+    if (req.query.search) {
+      queryObj = {
+        $or: [
+          { title: { $regex: req.query.search, $options: 'i' } },
+          { description: { $regex: req.query.search, $options: 'i' } },
+          { section: { $regex: req.query.search, $options: 'i' } }
+        ]
+      };
+    }
+
+    let query = Law.find(queryObj);
 
     // Sorting
     if (req.query.sort) {
