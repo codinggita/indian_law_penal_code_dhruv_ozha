@@ -232,3 +232,42 @@ exports.getLawsByAct = async (req, res) => {
     });
   }
 };
+
+// @desc    Get analytics and statistics for laws
+// @route   GET /api/v1/laws/analytics
+// @access  Public
+exports.getLawAnalytics = async (req, res) => {
+  try {
+    const totalLaws = await Law.countDocuments();
+    
+    // Aggregate to get count per act
+    const lawsPerAct = await Law.aggregate([
+      { $group: { _id: '$act', count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
+    // Aggregate to get total distinct chapters across all acts
+    const totalChaptersData = await Law.aggregate([
+      { $match: { chapter: { $ne: null } } },
+      { $group: { _id: { act: '$act', chapter: '$chapter' } } },
+      { $count: 'totalChapters' }
+    ]);
+
+    const totalChapters = totalChaptersData.length > 0 ? totalChaptersData[0].totalChapters : 0;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalLaws,
+        totalActs: lawsPerAct.length,
+        totalChapters,
+        lawsPerAct
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};

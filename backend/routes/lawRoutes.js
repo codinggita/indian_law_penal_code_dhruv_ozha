@@ -7,7 +7,8 @@ const {
   deleteLaw,
   getDistinctActs,
   getChaptersByAct,
-  getLawsByAct
+  getLawsByAct,
+  getLawAnalytics
 } = require('../controllers/lawController');
 
 const { protect, authorize } = require('../middlewares/auth');
@@ -15,6 +16,7 @@ const { protect, authorize } = require('../middlewares/auth');
 const router = express.Router();
 
 // Advanced routes (Must be defined before /:id)
+router.route('/analytics').get(getLawAnalytics);
 router.route('/acts').get(getDistinctActs);
 router.route('/acts/:actName').get(getLawsByAct);
 router.route('/acts/:actName/chapters').get(getChaptersByAct);
