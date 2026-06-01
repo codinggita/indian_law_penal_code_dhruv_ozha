@@ -139,7 +139,7 @@ This project is currently being developed over a comprehensive **23-Part Journey
 
 - [x] **Part 1:** Project Initialization & Documentation
 - [x] **Part 2:** Node & Express Setup
-- [ ] **Part 3:** MongoDB Configuration
+- [x] **Part 3:** MongoDB Configuration
 - [ ] **Part 4:** Dataset Analysis & Schema Planning
 - [ ] **Part 5:** Schema Implementation
 - [ ] **Part 6:** Core CRUD - Create & Read
