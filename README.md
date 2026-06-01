@@ -150,7 +150,7 @@ This project is currently being developed over a comprehensive **23-Part Journey
 - [x] **Part 11:** Search Routes
 - [x] **Part 12:** Filtering Routes
 - [x] **Part 13:** Advanced Combination Queries
-- [ ] **Part 14:** Authentication Setup & Models
+- [x] **Part 14:** Authentication Setup & Models
 - [ ] **Part 15:** Basic Auth APIs
 - [ ] **Part 16:** Advanced Auth APIs
 - [ ] **Part 17:** Middleware Practice Implementation
