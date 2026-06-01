@@ -1,5 +1,5 @@
 const express = require('express');
-const { createLaw, getLaws, getLawById } = require('../controllers/lawController');
+const { createLaw, getLaws, getLawById, updateLaw, deleteLaw } = require('../controllers/lawController');
 
 const router = express.Router();
 
@@ -10,6 +10,8 @@ router
 
 router
   .route('/:id')
-  .get(getLawById);
+  .get(getLawById)
+  .put(updateLaw)
+  .delete(deleteLaw);
 
 module.exports = router;
