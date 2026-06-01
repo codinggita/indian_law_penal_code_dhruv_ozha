@@ -143,7 +143,7 @@ This project is currently being developed over a comprehensive **23-Part Journey
 - [x] **Part 4:** Dataset Analysis & Schema Planning
 - [x] **Part 5:** Schema Implementation
 - [x] **Part 6:** Core CRUD - Create & Read
-- [ ] **Part 7:** Core CRUD - Update & Delete
+- [x] **Part 7:** Core CRUD - Update & Delete
 - [ ] **Part 8:** Advanced Law APIs
 - [ ] **Part 9:** Pagination Routes
 - [ ] **Part 10:** Sorting Routes
