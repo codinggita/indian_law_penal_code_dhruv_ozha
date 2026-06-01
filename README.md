@@ -133,9 +133,33 @@ Follow these steps to set up the project locally:
 
 ---
 
-## 🚀 Development Roadmap
+## 🚀 Development Roadmap & Progress Tracker
 
-This project is currently being developed over a comprehensive **23-Part Journey**, moving systematically from basic folder setup and MongoDB schema modeling to advanced aggregation queries, role-based access control, and robust API documentation.
+This project is currently being developed over a comprehensive **23-Part Journey**. Here is our live progress:
+
+- [x] **Part 1:** Project Initialization & Documentation
+- [x] **Part 2:** Node & Express Setup
+- [ ] **Part 3:** MongoDB Configuration
+- [ ] **Part 4:** Dataset Analysis & Schema Planning
+- [ ] **Part 5:** Schema Implementation
+- [ ] **Part 6:** Core CRUD - Create & Read
+- [ ] **Part 7:** Core CRUD - Update & Delete
+- [ ] **Part 8:** Advanced Law APIs
+- [ ] **Part 9:** Pagination Routes
+- [ ] **Part 10:** Sorting Routes
+- [ ] **Part 11:** Search Routes
+- [ ] **Part 12:** Filtering Routes
+- [ ] **Part 13:** Advanced Combination Queries
+- [ ] **Part 14:** Authentication Setup & Models
+- [ ] **Part 15:** Basic Auth APIs
+- [ ] **Part 16:** Advanced Auth APIs
+- [ ] **Part 17:** Middleware Practice Implementation
+- [ ] **Part 18:** Admin Routes
+- [ ] **Part 19:** Analytics & Statistics
+- [ ] **Part 20:** Request Validation & Error Handling
+- [ ] **Part 21:** Additional API Methods (HEAD & OPTIONS)
+- [ ] **Part 22:** Good to Have Features (Bonus)
+- [ ] **Part 23:** Data Seeding & Finalization
 
 <div align="center">
   <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHhzYW84amkwbXJub3E0d2Y3cHgzeG1xYmVwbDJ3eGk0ZGVyeXJzeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26h0pHNtHKjmDo4WQ/giphy.gif" alt="Coding GIF" width="400px">
