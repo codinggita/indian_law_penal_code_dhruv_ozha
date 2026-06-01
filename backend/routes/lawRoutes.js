@@ -10,6 +10,8 @@ const {
   getLawsByAct
 } = require('../controllers/lawController');
 
+const { protect, authorize } = require('../middlewares/auth');
+
 const router = express.Router();
 
 // Advanced routes (Must be defined before /:id)
@@ -20,12 +22,12 @@ router.route('/acts/:actName/chapters').get(getChaptersByAct);
 router
   .route('/')
   .get(getLaws)
-  .post(createLaw);
+  .post(protect, authorize('admin'), createLaw);
 
 router
   .route('/:id')
   .get(getLawById)
-  .put(updateLaw)
-  .delete(deleteLaw);
+  .put(protect, authorize('admin'), updateLaw)
+  .delete(protect, authorize('admin'), deleteLaw);
 
 module.exports = router;
