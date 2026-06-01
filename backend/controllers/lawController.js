@@ -23,12 +23,25 @@ exports.createLaw = async (req, res) => {
 // @access  Public
 exports.getLaws = async (req, res) => {
   try {
+    let query = Law.find();
+
+    // Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('act section');
+    }
+
     // Pagination
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 20;
     const skip = (page - 1) * limit;
 
-    const laws = await Law.find().skip(skip).limit(limit);
+    query = query.skip(skip).limit(limit);
+
+    // Execute query
+    const laws = await query;
 
     // Pagination result
     const total = await Law.countDocuments();

@@ -146,7 +146,7 @@ This project is currently being developed over a comprehensive **23-Part Journey
 - [x] **Part 7:** Core CRUD - Update & Delete
 - [x] **Part 8:** Advanced Law APIs
 - [x] **Part 9:** Pagination Routes
-- [ ] **Part 10:** Sorting Routes
+- [x] **Part 10:** Sorting Routes
 - [ ] **Part 11:** Search Routes
 - [ ] **Part 12:** Filtering Routes
 - [ ] **Part 13:** Advanced Combination Queries
