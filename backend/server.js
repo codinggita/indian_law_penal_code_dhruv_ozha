@@ -20,6 +20,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Enable pre-flight requests for all routes
+app.options('*', cors());
+
 // Mount routers
 app.use('/api/v1/laws', lawRoutes);
 app.use('/api/v1/auth', authRoutes);
