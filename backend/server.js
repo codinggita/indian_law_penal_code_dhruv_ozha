@@ -9,11 +9,17 @@ dotenv.config();
 // Connect to MongoDB
 connectDB();
 
+// Route files
+const lawRoutes = require('./routes/lawRoutes');
+
 const app = express();
 
 // Standard middleware
 app.use(express.json());
 app.use(cors());
+
+// Mount routers
+app.use('/api/v1/laws', lawRoutes);
 
 // Basic health-check route to verify server status
 app.get('/api/v1/health', (req, res) => {
