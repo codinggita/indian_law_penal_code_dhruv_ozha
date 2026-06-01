@@ -1,6 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
 const connectDB = require('./config/db');
 
 // Load environment variables
@@ -18,6 +22,23 @@ const app = express();
 
 // Standard middleware
 app.use(express.json());
+
+// Sanitize data (Prevent NoSQL injection)
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100
+});
+app.use(limiter);
+
+// Prevent http param pollution
+app.use(hpp());
+
 app.use(cors());
 
 // Enable pre-flight requests for all routes
