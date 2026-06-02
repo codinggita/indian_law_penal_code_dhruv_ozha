@@ -1,77 +1,264 @@
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('../middlewares/async');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const TokenBlacklist = require('../models/TokenBlacklist');
+const asyncHandler = require('../utils/asyncHandler');
+const ApiResponse = require('../utils/apiResponse');
 
-const sendTokenResponse = (user, statusCode, res) => {
-  const token = user.getSignedJwtToken();
-  res.status(statusCode).json({ success: true, token });
-};
+function createToken(user) {
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+  );
+}
 
-// @desc    Register user
-// @route   POST /api/v1/auth/register
-// @access  Public
+// POST /api/v1/auth/register
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
-  const user = await User.create({ name, email, password, role });
-  sendTokenResponse(user, 201, res);
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return ApiResponse.error(res, 'Name, email, and password are required.', null, 400);
+  }
+
+  const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
+  if (existingUser) {
+    return ApiResponse.error(res, 'User already exists.', null, 409);
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await User.create({
+    name: name.trim(),
+    email: email.toLowerCase().trim(),
+    password: hashedPassword
+  });
+
+  const token = createToken(user);
+
+  return ApiResponse.success(res, 'User registered successfully.', {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified
+    },
+    token
+  }, 201);
 });
 
-// @desc    Login user
-// @route   POST /api/v1/auth/login
-// @access  Public
+// POST /api/v1/auth/login
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
-    return next(new ErrorResponse('Please provide an email and password', 400));
+    return ApiResponse.error(res, 'Email and password are required.', null, 400);
   }
 
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
   if (!user) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    return ApiResponse.error(res, 'Invalid credentials.', null, 401);
   }
 
-  const isMatch = await user.matchPassword(password);
+  if (user.isBanned) {
+    return ApiResponse.error(res, 'This account has been banned.', null, 403);
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return next(new ErrorResponse('Invalid credentials', 401));
+    return ApiResponse.error(res, 'Invalid credentials.', null, 401);
   }
 
-  sendTokenResponse(user, 200, res);
-});
-
-// @desc    Get current logged in user
-// @route   GET /api/v1/auth/me
-// @access  Private
-exports.getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-  res.status(200).json({ success: true, data: user });
-});
-
-// @desc    Update user details
-// @route   PUT /api/v1/auth/updatedetails
-// @access  Private
-exports.updateDetails = asyncHandler(async (req, res, next) => {
-  const fieldsToUpdate = {
-    name: req.body.name,
-    email: req.body.email
-  };
-  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
-    new: true,
-    runValidators: true
-  });
-  res.status(200).json({ success: true, data: user });
-});
-
-// @desc    Update password
-// @route   PUT /api/v1/auth/updatepassword
-// @access  Private
-exports.updatePassword = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select('+password');
-
-  if (!(await user.matchPassword(req.body.currentPassword))) {
-    return next(new ErrorResponse('Password is incorrect', 401));
-  }
-
-  user.password = req.body.newPassword;
+  user.lastLogin = new Date();
   await user.save();
-  sendTokenResponse(user, 200, res);
+
+  const token = createToken(user);
+
+  return ApiResponse.success(res, 'Login successful.', {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified
+    },
+    token
+  }, 200);
+});
+
+// POST /api/v1/auth/logout
+exports.logout = asyncHandler(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    // Stateful revocation: save to blacklist database collection
+    await TokenBlacklist.create({ token });
+  }
+  return ApiResponse.success(res, 'Logged out successfully (token revoked).', {}, 200);
+});
+
+// GET /api/v1/auth/profile
+exports.getProfile = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('-password');
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+  return ApiResponse.success(res, 'Profile fetched successfully.', user, 200);
+});
+
+// PATCH /api/v1/auth/profile
+exports.updateProfile = asyncHandler(async (req, res, next) => {
+  const { name, email } = req.body;
+  const updates = {};
+  if (name) updates.name = name.trim();
+  if (email) updates.email = email.toLowerCase().trim();
+
+  const user = await User.findByIdAndUpdate(req.user.id, updates, { new: true }).select('-password');
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+  return ApiResponse.success(res, 'Profile updated successfully.', user, 200);
+});
+
+// POST /api/v1/auth/change-password
+exports.changePassword = asyncHandler(async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    return ApiResponse.error(res, 'Old and new passwords are required.', null, 400);
+  }
+
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    return ApiResponse.error(res, 'Incorrect current password.', null, 400);
+  }
+
+  user.password = await bcrypt.hash(newPassword, 10);
+  await user.save();
+
+  return ApiResponse.success(res, 'Password changed successfully.', {}, 200);
+});
+
+// POST /api/v1/auth/forgot-password
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return ApiResponse.error(res, 'Email is required.', null, 400);
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+
+  // Generate 6-digit verification code acting as a reset password token/OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  user.otp = otp;
+  user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+  await user.save();
+
+  console.log(`[SMTP SIMULATION] Reset Password Token/OTP for ${user.email} is: ${otp}`);
+  return ApiResponse.success(res, 'Reset password OTP sent successfully (Simulated).', { email }, 200);
+});
+
+// POST /api/v1/auth/reset-password
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  const { email, otp, newPassword } = req.body;
+  if (!email || !otp || !newPassword) {
+    return ApiResponse.error(res, 'Email, OTP, and new password are required.', null, 400);
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
+  if (!user || user.otp !== otp || user.otpExpiry < new Date()) {
+    return ApiResponse.error(res, 'Invalid or expired OTP/Reset Token.', null, 400);
+  }
+
+  user.password = await bcrypt.hash(newPassword, 10);
+  user.otp = undefined;
+  user.otpExpiry = undefined;
+  await user.save();
+
+  return ApiResponse.success(res, 'Password reset successfully.', {}, 200);
+});
+
+// POST /api/v1/auth/verify-email
+exports.verifyEmail = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return ApiResponse.error(res, 'Email is required.', null, 400);
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+
+  return ApiResponse.success(res, 'Email verification checked.', {
+    email: user.email,
+    isVerified: user.isVerified
+  }, 200);
+});
+
+// POST /api/v1/auth/send-otp
+exports.sendOTP = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return ApiResponse.error(res, 'Email is required.', null, 400);
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  user.otp = otp;
+  user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+  await user.save();
+
+  console.log(`[SMTP SIMULATION] Email verification OTP for ${user.email} is: ${otp}`);
+  return ApiResponse.success(res, 'OTP sent successfully (Simulated).', { email }, 200);
+});
+
+// POST /api/v1/auth/verify-otp
+exports.verifyOTP = asyncHandler(async (req, res, next) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return ApiResponse.error(res, 'Email and OTP are required.', null, 400);
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
+  if (!user || user.otp !== otp || user.otpExpiry < new Date()) {
+    return ApiResponse.error(res, 'Invalid or expired OTP.', null, 400);
+  }
+
+  user.isVerified = true;
+  user.otp = undefined;
+  user.otpExpiry = undefined;
+  await user.save();
+
+  return ApiResponse.success(res, 'Email verified successfully.', { isVerified: true }, 200);
+});
+
+// GET /api/v1/auth/sessions
+exports.sessions = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+
+  const activeSessions = [
+    {
+      device: req.headers['user-agent'] || 'Unknown Device',
+      ipAddress: req.ip || req.connection.remoteAddress || '127.0.0.1',
+      lastActive: user.lastLogin || user.updatedAt,
+      isCurrentSession: true
+    }
+  ];
+
+  return ApiResponse.success(res, 'Active sessions fetched successfully.', activeSessions, 200);
 });

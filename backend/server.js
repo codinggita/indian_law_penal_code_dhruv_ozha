@@ -1,62 +1,64 @@
+require('dotenv').config();
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const rateLimit = require('express-rate-limit');
-const hpp = require('hpp');
-const connectDB = require('./config/db');
+const connectDB = require('./src/config/db');
 
-// Load environment variables
-dotenv.config();
+// Import routers
+const lawRoutes = require('./src/routes/lawRoutes');
+const authRoutes = require('./src/routes/authRoutes');
+const searchRoutes = require('./src/routes/searchRoutes');
+const analyticsRoutes = require('./src/routes/analyticsRoutes');
+const statsRoutes = require('./src/routes/statsRoutes');
+const jwtRoutes = require('./src/routes/jwtRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
+const middlewareRoutes = require('./src/routes/middlewareRoutes');
 
-// Connect to MongoDB
+// Import middlewares
+const requestLogger = require('./src/middlewares/requestLogger');
+const rateLimiter = require('./src/middlewares/rateLimiter');
+const { notFound, errorHandler } = require('./src/middlewares/errorHandler');
+
+// Connect to database
 connectDB();
-
-// Route files
-const lawRoutes = require('./routes/lawRoutes');
-const authRoutes = require('./routes/authRoutes');
-const errorHandler = require('./middlewares/error');
 
 const app = express();
 
-// Standard middleware
-app.use(express.json());
-
-// Sanitize data (Prevent NoSQL injection)
-app.use(mongoSanitize());
-
-// Set security headers
-app.use(helmet());
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 mins
-  max: 100
-});
-app.use(limiter);
-
-// Prevent http param pollution
-app.use(hpp());
-
+// Middlewares
 app.use(cors());
+app.use(express.json());
+app.use(requestLogger);
 
-// Enable pre-flight requests for all routes
-app.options('*', cors());
+// Global API Rate Limiter
+app.use('/api/', rateLimiter);
 
-// Mount routers
+// Health check endpoints
+app.get('/api/v1/health', (req, res) => {
+  res.setHeader('X-API-Health', 'Healthy');
+  return res.status(200).json({ success: true, message: 'Indian Law Penal Code API is healthy.' });
+});
+
+app.get('/api/health', (req, res) => {
+  return res.status(200).json({ success: true, message: 'Server is running.' });
+});
+
+// Basic Route
+app.get('/', (req, res) => {
+  return res.send('Indian Law Penal Code API is running...');
+});
+
+// Mount Routes
 app.use('/api/v1/laws', lawRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/search', searchRoutes);
+app.use('/api/v1/analytics', analyticsRoutes);
+app.use('/api/v1/stats', statsRoutes);
+app.use('/api/v1/jwt', jwtRoutes);
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/middleware', middlewareRoutes);
 
+// Error handlers
+app.use(notFound);
 app.use(errorHandler);
-
-// Basic health-check route to verify server status
-app.get('/api/v1/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Indian Penal Code API Server is running successfully!'
-  });
-});
 
 const PORT = process.env.PORT || 5000;
 

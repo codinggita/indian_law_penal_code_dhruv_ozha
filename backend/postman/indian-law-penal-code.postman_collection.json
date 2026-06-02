@@ -1,0 +1,811 @@
+{
+  "info": {
+    "name": "Indian Law Penal Code API",
+    "_postman_id": "d8b8fc18-7f62-44f8-86c8-1b99a6e1f012",
+    "description": "Comprehensive MERN backend API collection for all auth, legal, statistics, analytics, admin, JWT utility, and middleware practice endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "0. Health & Diagnostics",
+      "item": [
+        {
+          "name": "API Root Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] }
+          }
+        },
+        {
+          "name": "GET API v1 Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/health", "host": ["{{baseUrl}}"], "path": ["api", "v1", "health"] }
+          }
+        },
+        {
+          "name": "GET Global Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Authentication Suite",
+      "item": [
+        {
+          "name": "User Registration",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Dhruv Ozha\",\n  \"email\": \"dhruv@example.com\",\n  \"password\": \"password123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "register"] }
+          }
+        },
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"dhruv@example.com\",\n  \"password\": \"password123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "login"] }
+          }
+        },
+        {
+          "name": "User Profile (GET)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "profile"] }
+          }
+        },
+        {
+          "name": "User Profile (PATCH Update)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Dhruv Ozha (B.Tech)\",\n  \"email\": \"dhruv@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "profile"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"oldPassword\": \"password123\",\n  \"newPassword\": \"newpass123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/change-password", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "change-password"] }
+          }
+        },
+        {
+          "name": "Forgot Password (OTP Request)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"dhruv@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/forgot-password", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "forgot-password"] }
+          }
+        },
+        {
+          "name": "Reset Password with OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"dhruv@example.com\",\n  \"otp\": \"123456\",\n  \"newPassword\": \"finalpass123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "reset-password"] }
+          }
+        },
+        {
+          "name": "Send Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"dhruv@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/send-otp", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "send-otp"] }
+          }
+        },
+        {
+          "name": "Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"dhruv@example.com\",\n  \"otp\": \"123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/verify-otp", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "verify-otp"] }
+          }
+        },
+        {
+          "name": "Verify Email Status Check",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"dhruv@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/verify-email", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "verify-email"] }
+          }
+        },
+        {
+          "name": "Fetch Active Sessions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/sessions", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "sessions"] }
+          }
+        },
+        {
+          "name": "User Logout (Revocation)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/logout", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Laws Core CRUD",
+      "item": [
+        {
+          "name": "List Laws (Filter/Sort/Page)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws?page=1&limit=10&sort=-views", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws"], "query": [{"key":"page","value":"1"},{"key":"limit","value":"10"},{"key":"sort","value":"-views"}] }
+          }
+        },
+        {
+          "name": "Create Law (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"sectionNumber\": \"302\",\n  \"title\": \"Punishment for Murder\",\n  \"description\": \"Whoever commits murder shall be punished with death, or imprisonment for life, and shall also be liable to fine.\",\n  \"actName\": \"IPC\",\n  \"category\": \"Offenses Against Human Body\",\n  \"punishmentType\": \"Capital Punishment / Life Imprisonment\",\n  \"bailable\": false,\n  \"cognizable\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/laws", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws"] }
+          }
+        },
+        {
+          "name": "Get Law by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}"] }
+          }
+        },
+        {
+          "name": "Check Law Exists by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/exists/{{lawId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "exists", "{{lawId}}"] }
+          }
+        },
+        {
+          "name": "Get Law Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}/summary", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}", "summary"] }
+          }
+        },
+        {
+          "name": "Get Law History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}/history", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}", "history"] }
+          }
+        },
+        {
+          "name": "Random Law",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/random", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "random"] }
+          }
+        },
+        {
+          "name": "Trending Laws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/trending", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "trending"] }
+          }
+        },
+        {
+          "name": "Recent Laws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/recent", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "recent"] }
+          }
+        },
+        {
+          "name": "Archived Laws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/archived", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "archived"] }
+          }
+        },
+        {
+          "name": "Update Law (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"punishmentDetails\": \"Death sentence, life imprisonment, and mandatory fine.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}"] }
+          }
+        },
+        {
+          "name": "Archive Law",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}/archive", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}", "archive"] }
+          }
+        },
+        {
+          "name": "Restore Law",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}/restore", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}", "restore"] }
+          }
+        },
+        {
+          "name": "Delete Law (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/{{lawId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "{{lawId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Search & Filters",
+      "item": [
+        {
+          "name": "Search Laws by Keyword",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/search/laws?q=murder", "host": ["{{baseUrl}}"], "path": ["api", "v1", "search", "laws"], "query": [{"key":"q","value":"murder"}] }
+          }
+        },
+        {
+          "name": "Filter by Act",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/act/IPC", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "act", "IPC"] }
+          }
+        },
+        {
+          "name": "Filter by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/category/CyberCrime", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "category", "CyberCrime"] }
+          }
+        },
+        {
+          "name": "Filter by State",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/state/Delhi", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "state", "Delhi"] }
+          }
+        },
+        {
+          "name": "Filter by Court",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/court/SupremeCourt", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "court", "SupremeCourt"] }
+          }
+        },
+        {
+          "name": "Filter by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/status/active", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "status", "active"] }
+          }
+        },
+        {
+          "name": "Filter Bailable Offenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/bailable/true", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "bailable", "true"] }
+          }
+        },
+        {
+          "name": "Filter Cognizable Offenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/cognizable/true", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "cognizable", "true"] }
+          }
+        },
+        {
+          "name": "Filter by Chapter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/chapter/16", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "chapter", "16"] }
+          }
+        },
+        {
+          "name": "Filter by Section",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/section/302", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "section", "302"] }
+          }
+        },
+        {
+          "name": "Filter High Importance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/high-importance", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "high-importance"] }
+          }
+        },
+        {
+          "name": "Filter Repealed Offenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/repealed", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "repealed"] }
+          }
+        },
+        {
+          "name": "Filter Constitutional Laws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/laws/filter/constitutional", "host": ["{{baseUrl}}"], "path": ["api", "v1", "laws", "filter", "constitutional"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Aggregation Analytics",
+      "item": [
+        {
+          "name": "Most Viewed Laws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/most-viewed", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "most-viewed"] }
+          }
+        },
+        {
+          "name": "Most Bookmarked Laws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/most-bookmarked", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "most-bookmarked"] }
+          }
+        },
+        {
+          "name": "Count by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/by-category", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "by-category"] }
+          }
+        },
+        {
+          "name": "Count by State",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/by-state", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "by-state"] }
+          }
+        },
+        {
+          "name": "Count by Court",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/by-court", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "by-court"] }
+          }
+        },
+        {
+          "name": "Recent Act Updates (30 days)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/recent-updates", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "recent-updates"] }
+          }
+        },
+        {
+          "name": "Popularity Score (views+bookmarks)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/popularity", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "popularity"] }
+          }
+        },
+        {
+          "name": "Complexity Groupings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/complexity", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "complexity"] }
+          }
+        },
+        {
+          "name": "Search Query Trends Log",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/search-trends", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "search-trends"] }
+          }
+        },
+        {
+          "name": "User Activity Aggregations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/analytics/laws/user-activity", "host": ["{{baseUrl}}"], "path": ["api", "v1", "analytics", "laws", "user-activity"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Counts Statistics",
+      "item": [
+        {
+          "name": "Total Laws Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/count", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "count"] }
+          }
+        },
+        {
+          "name": "Active Laws Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/active", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "active"] }
+          }
+        },
+        {
+          "name": "Repealed Laws Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/repealed", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "repealed"] }
+          }
+        },
+        {
+          "name": "Count Grouped by Act",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/by-act", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "by-act"] }
+          }
+        },
+        {
+          "name": "Count Grouped by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/by-category", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "by-category"] }
+          }
+        },
+        {
+          "name": "Count Grouped by State",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/by-state", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "by-state"] }
+          }
+        },
+        {
+          "name": "Total Bookmarks Metric",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/stats/laws/bookmarks", "host": ["{{baseUrl}}"], "path": ["api", "v1", "stats", "laws", "bookmarks"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Administration Suite",
+      "item": [
+        {
+          "name": "List Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/users", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "users"] }
+          }
+        },
+        {
+          "name": "Get User Details",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Ban User Account",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/users/{{userId}}/ban", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "users", "{{userId}}", "ban"] }
+          }
+        },
+        {
+          "name": "Unban User Account",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/users/{{userId}}/unban", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "users", "{{userId}}", "unban"] }
+          }
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"role\": \"admin\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/users/{{userId}}/role", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "users", "{{userId}}", "role"] }
+          }
+        },
+        {
+          "name": "List Issue Reports",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/reports", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "reports"] }
+          }
+        },
+        {
+          "name": "Resolve Issue Report",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"resolutionDetails\": \"Act section text verified and database seeding updated.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/reports/{{reportId}}/resolve", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "reports", "{{reportId}}", "resolve"] }
+          }
+        },
+        {
+          "name": "Server Health Diagnostics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/system/health", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "system", "health"] }
+          }
+        },
+        {
+          "name": "System Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/system/logs", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "system", "logs"] }
+          }
+        },
+        {
+          "name": "Toggle Maintenance Mode",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/system/maintenance", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "system", "maintenance"] }
+          }
+        },
+        {
+          "name": "Clear Server Cache",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/cache/clear", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "cache", "clear"] }
+          }
+        },
+        {
+          "name": "Security Events Audit",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/admin/security/events", "host": ["{{baseUrl}}"], "path": ["api", "v1", "admin", "security", "events"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. JWT Utility Utilities",
+      "item": [
+        {
+          "name": "Generate Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"payload\": {\n    \"id\": \"64b0f2f5e13a9c6b8a5e4f11\",\n    \"role\": \"admin\"\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/generate-token", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "generate-token"] }
+          }
+        },
+        {
+          "name": "Verify and Decode Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{authToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/verify-token", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "verify-token"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/refresh-token", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "refresh-token"] }
+          }
+        },
+        {
+          "name": "Revoke Token (Blacklist)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{authToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/revoke-token", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "revoke-token"] }
+          }
+        },
+        {
+          "name": "Protected Profile (JWT Guard)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/profile", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "profile"] }
+          }
+        },
+        {
+          "name": "Protected Dashboard (JWT Guard)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/dashboard", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "dashboard"] }
+          }
+        },
+        {
+          "name": "Private Laws Access",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/private-laws", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "private-laws"] }
+          }
+        },
+        {
+          "name": "Private Analytics Access",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/jwt/private-analytics", "host": ["{{baseUrl}}"], "path": ["api", "v1", "jwt", "private-analytics"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Middleware Practice",
+      "item": [
+        {
+          "name": "Logger Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/logger", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "logger"] }
+          }
+        },
+        {
+          "name": "Auth Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/auth", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "auth"] }
+          }
+        },
+        {
+          "name": "Caching Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/cache", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "cache"] }
+          }
+        },
+        {
+          "name": "Rate-limit Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/rate-limit", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "rate-limit"] }
+          }
+        },
+        {
+          "name": "Error-handler Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/error-handler", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "error-handler"] }
+          }
+        },
+        {
+          "name": "Request Timing Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/request-time", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "request-time"] }
+          }
+        },
+        {
+          "name": "Security Headers Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/security", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "security"] }
+          }
+        },
+        {
+          "name": "CORS Practice Middleware Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/cors", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "cors"] }
+          }
+        },
+        {
+          "name": "Compression Practice Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/compression", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "compression"] }
+          }
+        },
+        {
+          "name": "Input Validation Demo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/v1/middleware/validation?category=CyberCrime", "host": ["{{baseUrl}}"], "path": ["api", "v1", "middleware", "validation"], "query": [{"key":"category","value":"CyberCrime"}] }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "authToken", "value": "your_jwt_token_value_here" },
+    { "key": "lawId", "value": "6a0d617bd8b43ae4bba73b22" },
+    { "key": "userId", "value": "64b0f2f5e13a9c6b8a5e4f11" },
+    { "key": "reportId", "value": "65b0f2f5e13a9c6b8a5e4f22" }
+  ]
+}

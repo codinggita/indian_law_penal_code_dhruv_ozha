@@ -1,33 +1,96 @@
 const mongoose = require('mongoose');
 
 const lawSchema = new mongoose.Schema({
-  act: { 
-    type: String, 
+  sectionNumber: {
+    type: String,
+    required: [true, 'Section number is required'],
+    index: true,
+    trim: true
+  },
+  title: {
+    type: String,
+    required: [true, 'Title is required'],
+    trim: true
+  },
+  description: {
+    type: String,
+    required: [true, 'Description is required']
+  },
+  actName: {
+    type: String,
     required: [true, 'Act name is required'],
-    index: true // e.g., 'IPC', 'CPC', 'CrPC', 'MVA'
+    index: true,
+    enum: ['IPC', 'CrPC', 'CPC', 'HMA', 'IDA', 'IEA', 'MVA', 'NIA', 'Evidence Act', 'Constitution', 'Other']
   },
-  chapter: { 
-    type: Number, 
-    default: null 
+  chapter: {
+    type: String,
+    trim: true
   },
-  chapter_title: { 
-    type: String, 
-    default: null 
-  },
-  section: { 
-    type: String, 
-    required: [true, 'Section number/string is required'],
-    index: true // e.g., "1", "2A", "498A"
-  },
-  title: { 
-    type: String, 
-    required: [true, 'Section title is required'],
+  category: {
+    type: String,
+    required: [true, 'Category is required'],
     index: true
   },
-  description: { 
-    type: String, 
-    required: [true, 'Section description is required']
-  }
+  punishmentType: {
+    type: String
+  },
+  punishmentDetails: {
+    type: String
+  },
+  bailable: {
+    type: Boolean,
+    default: false
+  },
+  cognizable: {
+    type: Boolean,
+    default: true
+  },
+  compoundable: {
+    type: Boolean,
+    default: false
+  },
+  triableBy: {
+    type: String
+  },
+  state: {
+    type: String,
+    default: 'All States',
+    index: true
+  },
+  court: {
+    type: String,
+    index: true
+  },
+  status: {
+    type: String,
+    enum: ['active', 'repealed', 'amended'],
+    default: 'active'
+  },
+  importance: {
+    type: String,
+    enum: ['low', 'medium', 'high'],
+    default: 'medium'
+  },
+  views: {
+    type: Number,
+    default: 0
+  },
+  bookmarkCount: {
+    type: Number,
+    default: 0
+  },
+  isArchived: {
+    type: Boolean,
+    default: false
+  },
+  tags: [{
+    type: String
+  }],
+  updateHistory: [{
+    updatedAt: { type: Date, default: Date.now },
+    updatedBy: String,
+    changes: String
+  }]
 }, { 
   timestamps: true 
 });
