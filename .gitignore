@@ -1,9 +1,0 @@
-node_modules/
-.env
-recourse/
-.DS_Store
-dist/
-build/
-*.log
-
-AI_WORK_LOG.md
