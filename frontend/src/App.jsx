@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import ToastProvider from './components/ui/ToastProvider';
 
 function Placeholder({ name }) {
   return <div className="p-8 text-2xl font-display">{name}</div>;
@@ -7,6 +8,7 @@ function Placeholder({ name }) {
 function App() {
   return (
     <div className="min-h-screen bg-bg">
+      <ToastProvider />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Placeholder name="Landing Page" />} />
