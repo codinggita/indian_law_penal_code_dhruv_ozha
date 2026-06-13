@@ -3,6 +3,7 @@ import ToastProvider from './components/ui/ToastProvider';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PageWrapper from './components/layout/PageWrapper';
+import Landing from './pages/Landing';
 
 function Placeholder({ name }) {
   return (
@@ -23,7 +24,7 @@ function App() {
       <main className="flex-1 flex flex-col pt-16">
         <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Placeholder name="Landing Page" />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Placeholder name="Login Page" />} />
         <Route path="/register" element={<Placeholder name="Register Page" />} />
         <Route path="/forgot-password" element={<Placeholder name="Forgot Password" />} />
