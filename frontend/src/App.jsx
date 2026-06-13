@@ -3,12 +3,14 @@ import ToastProvider from './components/ui/ToastProvider';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PageWrapper from './components/layout/PageWrapper';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Landing from './pages/Landing';
 import LawsList from './pages/laws/LawsList';
 import LawDetail from './pages/laws/LawDetail';
 import LawSearch from './pages/laws/LawSearch';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import Profile from './pages/user/Profile';
 
 function Placeholder({ name }) {
   return (
@@ -41,15 +43,22 @@ function App() {
         <Route path="/search" element={<LawSearch />} />
         
         {/* Protected Routes */}
-        <Route path="/profile" element={<Placeholder name="User Profile" />} />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
         
         {/* Admin Routes */}
-        <Route path="/admin" element={<Placeholder name="Admin Dashboard" />} />
-        <Route path="/admin/laws/new" element={<Placeholder name="Add Law" />} />
-        <Route path="/admin/laws/:id/edit" element={<Placeholder name="Edit Law" />} />
-        <Route path="/admin/users" element={<Placeholder name="Admin Users" />} />
-        <Route path="/admin/analytics" element={<Placeholder name="Admin Analytics" />} />
-        <Route path="/admin/logs" element={<Placeholder name="System Logs" />} />
+        <Route path="/admin" element={<ProtectedRoute adminOnly><Placeholder name="Admin Dashboard" /></ProtectedRoute>} />
+        <Route path="/admin/laws/new" element={<ProtectedRoute adminOnly><Placeholder name="Add Law" /></ProtectedRoute>} />
+        <Route path="/admin/laws/:id/edit" element={<ProtectedRoute adminOnly><Placeholder name="Edit Law" /></ProtectedRoute>} />
+        <Route path="/admin/users" element={<ProtectedRoute adminOnly><Placeholder name="Admin Users" /></ProtectedRoute>} />
+        <Route path="/admin/analytics" element={<ProtectedRoute adminOnly><Placeholder name="Admin Analytics" /></ProtectedRoute>} />
+        <Route path="/admin/logs" element={<ProtectedRoute adminOnly><Placeholder name="System Logs" /></ProtectedRoute>} />
         
         {/* Fallback */}
         <Route path="*" element={<Placeholder name="404 Not Found" />} />
