@@ -262,3 +262,45 @@ exports.sessions = asyncHandler(async (req, res, next) => {
 
   return ApiResponse.success(res, 'Active sessions fetched successfully.', activeSessions, 200);
 });
+
+// GET /api/v1/auth/bookmarks
+exports.getBookmarks = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).populate('bookmarks');
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+  return ApiResponse.success(res, 'Bookmarks fetched successfully.', user.bookmarks, 200);
+});
+
+// POST /api/v1/auth/bookmarks/:lawId
+exports.toggleBookmark = asyncHandler(async (req, res, next) => {
+  const { lawId } = req.params;
+  const user = await User.findById(req.user.id);
+  const Law = require('../models/Law');
+
+  if (!user) {
+    return ApiResponse.error(res, 'User not found.', null, 404);
+  }
+
+  const law = await Law.findById(lawId);
+  if (!law) {
+    return ApiResponse.error(res, 'Law not found.', null, 404);
+  }
+
+  const isBookmarked = user.bookmarks.includes(lawId);
+  if (isBookmarked) {
+    user.bookmarks = user.bookmarks.filter(id => id.toString() !== lawId);
+    law.bookmarkCount = Math.max(0, law.bookmarkCount - 1);
+  } else {
+    user.bookmarks.push(lawId);
+    law.bookmarkCount += 1;
+  }
+
+  await user.save();
+  await law.save();
+
+  return ApiResponse.success(res, isBookmarked ? 'Bookmark removed.' : 'Bookmark added.', {
+    isBookmarked: !isBookmarked,
+    bookmarks: user.bookmarks
+  }, 200);
+});

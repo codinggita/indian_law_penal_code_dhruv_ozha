@@ -44,9 +44,15 @@ function normalizeSort(sortValue) {
 function buildFilters(query) {
   const filters = {};
 
-  if (query.act) filters.actName = query.act;
-  if (query.category) filters.category = query.category;
-  if (query.state) filters.state = query.state;
+  if (query.act) {
+    filters.actName = Array.isArray(query.act) ? { $in: query.act } : (query.act.includes(',') ? { $in: query.act.split(',') } : query.act);
+  }
+  if (query.category) {
+    filters.category = Array.isArray(query.category) ? { $in: query.category } : (query.category.includes(',') ? { $in: query.category.split(',') } : query.category);
+  }
+  if (query.state) {
+    filters.state = Array.isArray(query.state) ? { $in: query.state } : (query.state.includes(',') ? { $in: query.state.split(',') } : query.state);
+  }
 
   const bailable = parseBoolean(query.bailable);
   if (bailable !== undefined) filters.bailable = bailable;

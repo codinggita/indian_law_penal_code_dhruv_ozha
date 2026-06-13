@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Scale, Menu, X, User } from 'lucide-react';
+import { Scale, Menu, X, User, Moon, Sun } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+import { useTheme } from '../ui/ThemeProvider';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 
@@ -10,6 +11,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { isAuthenticated, role, logout } = useAuthStore();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <Scale className="h-8 w-8 text-primary" />
+              <img src="/logo.png" alt="LexIndia Logo" className="h-8 w-auto" />
               <span className="font-display font-bold text-2xl text-text-primary tracking-tight">LexIndia</span>
             </Link>
             
@@ -48,6 +50,13 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-text-secondary hover:text-primary transition-colors rounded-full hover:bg-surface-2"
+              aria-label="Toggle dark mode"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             {!isAuthenticated ? (
               <>
                 <Button variant="ghost" onClick={() => navigate('/login')}>Login</Button>
@@ -99,7 +108,14 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center md:hidden space-x-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-text-secondary hover:text-primary transition-colors rounded-full"
+              aria-label="Toggle dark mode"
+            >
+              {theme === 'dark' ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+            </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-text-secondary hover:text-primary p-2"

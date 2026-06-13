@@ -21,7 +21,7 @@ export default function LawsList() {
   });
 
   const page = parseInt(searchParams.get('page') || '1', 10);
-  const sort = searchParams.get('sort') || '-createdAt';
+  const sort = searchParams.get('sort') || 'title';
 
   const fetchParams = {
     page,
@@ -46,7 +46,7 @@ export default function LawsList() {
     if (filters.court) newParams.set('court', filters.court);
     if (filters.bailable) newParams.set('bailable', filters.bailable);
     if (filters.cognizable) newParams.set('cognizable', filters.cognizable);
-    if (sort !== '-createdAt') newParams.set('sort', sort);
+    if (sort !== 'title') newParams.set('sort', sort);
     newParams.set('page', '1'); // Reset to page 1 on filter change
     setSearchParams(newParams);
   };

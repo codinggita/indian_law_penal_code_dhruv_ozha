@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
-export default function PageWrapper({ children, title, className = '' }) {
-  useEffect(() => {
-    if (title) {
-      document.title = `${title} | LexIndia`;
-    } else {
-      document.title = 'LexIndia — Indian Law Reference Platform';
-    }
-  }, [title]);
+export default function PageWrapper({ children, title, description, className = '' }) {
+  const pageTitle = title ? `${title} | LexIndia` : 'LexIndia — Indian Law Reference Platform';
+  const metaDescription = description || 'Simplifying the penal code and making laws accessible to everyone.';
 
   return (
-    <motion.div
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={metaDescription} />
+      </Helmet>
+      <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
@@ -20,5 +22,6 @@ export default function PageWrapper({ children, title, className = '' }) {
     >
       {children}
     </motion.div>
+    </>
   );
 }

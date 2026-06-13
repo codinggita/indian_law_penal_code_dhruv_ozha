@@ -45,7 +45,11 @@ const userSchema = new mongoose.Schema({
   },
   lastLogin: {
     type: Date
-  }
+  },
+  bookmarks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Law'
+  }]
 }, { 
   timestamps: true 
 });

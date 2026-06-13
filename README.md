@@ -1,225 +1,165 @@
-<div align="center">
+# LexIndia - Full Stack Legal Dashboard
 
-# 🏛️ Indian Law Penal Code API
+LexIndia is a comprehensive, API-driven web application designed to simplify the Indian Penal Code and make complex laws easily accessible to everyone. It includes a user-facing law directory, an advanced search engine, and a fully functional Admin Dashboard for managing legal records, analytics, and platform users.
 
-### Full Stack MERN Backend System
-
-[![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express.js-4.x-lightgrey.svg)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-success.svg)](https://www.mongodb.com/)
-[![JWT](https://img.shields.io/badge/JWT-Authentication-blue.svg)](https://jwt.io/)
-
-</div>
-
----
-
-## 📖 Project Overview
-
-The **Indian Law Penal Code API** is a comprehensive, RESTful backend service designed to manage, search, and analyze legal documents and sections within the Indian Penal Code. Built strictly adhering to the MVC (Model-View-Controller) architecture, it offers a secure, scalable, and highly performant foundation for any web or mobile frontend.
-
-This system provides capabilities tailored for different user roles (Public, Authenticated Users, and Administrators), featuring full-text search, complex querying, detailed analytics, and robust JWT-based security.
+![LexIndia Project Banner](https://via.placeholder.com/1200x400/121212/F26522?text=LexIndia+-+Indian+Law+Reference+Platform)
 
 ---
 
 ## 🚀 Key Features
 
-### 🔐 Advanced Authentication & Security
-- **JWT Implementation**: Secure token generation with customizable expiration times.
-- **Stateful Logout (Token Blacklisting)**: Unlike traditional stateless JWTs, logged-out tokens are stored in a MongoDB `TokenBlacklist` collection to ensure they cannot be reused before they expire.
-- **OTP Workflows**: Integrated One-Time Password generation for email verification and secure password resets.
-- **Role-Based Access Control (RBAC)**: Distinct permissions for `admin` and `user` roles.
-- **Brute Force Protection**: Global rate limiting via `express-rate-limit` to prevent abuse.
+### User-Facing Features
+- **Secure Authentication**: JWT-based login and registration, complete with auto-login using persisted tokens in local storage.
+- **Law Directory & Search**: Browse through legal records. Includes a powerful Search Engine with debounced inputs and local session storage that remembers your past queries and active filters.
+- **Advanced Filtering**: Narrow down legal codes by Category (e.g., Criminal, Civil, Corporate), Court Level, Bailable/Non-Bailable status, and Cognizable nature.
+- **Bookmarking System**: Authenticated users can save their favorite laws to their profile for quick access later.
+- **Responsive UI/UX**: Built with Tailwind CSS v4 and Framer Motion for buttery-smooth animations, skeleton loaders, and a fully mobile-optimized navigation bar.
+- **Theme System**: Full Light and Dark Mode toggle, reading from user system preferences and saving manually toggled choices via local storage.
 
-### ⚖️ Law Management System
-- **Full CRUD Operations**: Create, Read, Update, and Delete legal records.
-- **Soft Deletes**: Archive and restore functionality, ensuring data is never accidentally destroyed permanently.
-- **Audit Trails**: Built-in update history tracking to see when and how a law was modified.
-- **Dynamic Summaries**: Dedicated endpoints that return brief summaries (title, section, punishment) for quick previews.
+### Admin Dashboard Features
+- **Role-Based Access Control (RBAC)**: Strict frontend and backend route guards ensure that only authorized 'admin' accounts can access sensitive panels.
+- **Law Management (CRUD)**: Create, Read, Update, and Delete laws directly from the UI. Integrated with React Query for instant, optimistic UI updates without page reloads.
+- **User Management**: Admins can view all registered users and adjust roles.
+- **Analytics Engine**: Backend MongoDB aggregation pipelines that calculate real-time platform statistics (e.g., total laws, user signups, laws by category) and display them via intuitive Recharts graphs.
 
-### 🔍 Search & Filtering Engine
-- **Full-Text `$regex` Search**: Instantly query titles, descriptions, and categories.
-- **Multi-parameter Filtering**: Narrow down results by Act Name, Category, State, Court type, Bailability, and Cognizability.
-- **Pagination & Sorting**: Built-in limit/offset pagination and dynamic sorting (e.g., sort by most viewed).
-
-### 📊 Analytics & Reporting
-- **Aggregation Pipelines**: Utilizes MongoDB's powerful aggregation framework to generate real-time statistics.
-- **Data Insights**: Fetch breakdowns of laws by category, state, and court.
-- **Trending Data**: Identify the most viewed and most bookmarked laws across the platform.
-
-### 👑 Admin Privileges
-- **User Management**: View all users, ban/unban malicious accounts, and elevate user roles.
-- **System Monitoring**: Endpoints to check server health status, view system logs, and fetch security events.
+### Technical & Performance Optimizations
+- **Code Splitting**: React `lazy()` and `Suspense` are heavily utilized. The app code is split into logical chunks so users only download the code they need for the page they are viewing.
+- **React Error Boundary**: A global fallback screen ensures that rendering crashes are caught elegantly, avoiding the "white screen of death."
+- **SEO Optimized**: `react-helmet-async` injects dynamic `<title>` and `<meta name="description">` tags on every page, critical for Google Search indexing.
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+## 🛠️ Technology Stack
 
-| Technology / Package | Purpose |
-|----------------------|---------|
-| **Node.js** | Server-side JavaScript runtime engine |
-| **Express.js** | Fast, unopinionated web framework for Node.js |
-| **MongoDB & Mongoose** | NoSQL Database and powerful Object Data Modeling (ODM) library |
-| **Bcryptjs** | Cryptographic hashing of user passwords |
-| **JsonWebToken (JWT)** | Secure transmission of information as a JSON object |
-| **Express-Rate-Limit** | Basic rate-limiting middleware to prevent DDoS attacks |
-| **Cors** | Cross-Origin Resource Sharing configuration |
-| **Dotenv** | Zero-dependency module that loads environment variables |
+### Frontend (Client-Side)
+- **Framework**: React 19 + Vite
+- **Styling**: Tailwind CSS (v4) for utility-first styling. Custom CSS Variables implemented for dynamic theming.
+- **State Management**: 
+  - **Zustand**: Handles global authentication state cleanly without the boilerplate of Redux.
+  - **React Query (TanStack Query v5)**: Manages all asynchronous API state, caching, data fetching, and optimistic UI updates.
+- **Routing**: React Router DOM (v7) with nested layouts and protected route guards.
+- **Forms & Validation**: `react-hook-form` coupled with `zod` for robust schema validation and excellent performance.
+- **Icons & Animations**: `lucide-react` for SVG icons and `framer-motion` for micro-interactions and page transitions.
+
+### Backend (Server-Side)
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB (managed via Mongoose ODM)
+- **Authentication**: JWT (JSON Web Tokens) with short-lived access tokens and bcrypt for secure password hashing.
+- **Architecture**: Strict MVC (Model-View-Controller) structure.
 
 ---
 
-## 📁 Project Architecture (MVC)
+## 📦 System Architecture & Folder Structure
 
-The backend is strictly organized into functional directories to maintain separation of concerns:
-
+### Backend Directory (`/backend`)
 ```text
-backend/
-├── postman/                         # Pre-configured Postman collections for API testing
-├── src/
-│   ├── config/                      # Database and environment configurations
-│   ├── controllers/                 # Business logic for Auth, Laws, Admin, and Analytics
-│   ├── middlewares/                 # JWT Auth guards, Rate limiters, Global Error Handlers
-│   ├── models/                      # Mongoose Schemas (User, Law, TokenBlacklist)
-│   ├── routes/                      # Express Router definitions
-│   ├── scripts/                     # Automated testing (api.test.js) and DB seeding tools
-│   ├── services/                    # Reusable service-level functions (Optional Layer)
-│   └── utils/                       # API Response formatters and Async Error wrappers
-├── .env                             # Environment variables (Ignored in Git)
-├── server.js                        # Main application entry point
-└── package.json                     # Dependency manifests and NPM scripts
+/backend
+├── /src
+│   ├── /controllers     # Business logic (authController, lawController, analyticsController)
+│   ├── /middlewares     # authMiddleware (JWT verification), errorMiddleware
+│   ├── /models          # Mongoose Schemas (User, Law)
+│   ├── /routes          # Express Router definitions
+│   └── /scripts         # DB Seeders (seed.js)
+├── .env                 # Environment variables (git-ignored)
+└── server.js            # Express application entry point
+```
+
+### Frontend Directory (`/frontend`)
+```text
+/frontend
+├── /src
+│   ├── /api             # Axios instances and API service wrappers
+│   ├── /components      # Reusable UI pieces
+│   │   ├── /auth        # ProtectedRoute wrapper
+│   │   ├── /layout      # Navbar, Sidebar, Footer, PageWrapper (Helmet)
+│   │   ├── /shared      # LawCard, SearchBar
+│   │   └── /ui          # Buttons, Badges, Modals, Spinners, ErrorBoundaries
+│   ├── /hooks           # Custom React hooks
+│   ├── /pages           # Route components mapped by feature (admin, auth, laws, user)
+│   ├── /store           # Zustand stores (authStore.js)
+│   └── /styles          # globals.css (Tailwind @theme setup)
+├── App.jsx              # Main router and Suspense boundary
+└── main.jsx             # React entry point, QueryClient, and ThemeProvider
 ```
 
 ---
 
-## 🗃️ Database Schemas
+## 🔌 API Endpoints Summary
 
-### User Schema (`models/User.js`)
-Handles all authentication and user metadata.
-- `name`, `email`, `password` (hashed)
-- `role` (enum: user, admin)
-- `isBanned`, `isVerified`
-- `otp`, `otpExpiry` (for password resets)
+The Express backend exposes the following RESTful API routes under `/api/v1`:
 
-### Law Schema (`models/Law.js`)
-Stores the legal documentation.
-- `sectionNumber`, `title`, `description`
-- `actName`, `category`, `state`, `court`
-- `bailable`, `cognizable`, `compoundable`
-- `views`, `bookmarkCount`, `isArchived`
-- `updateHistory` (Array of modification records)
+### Authentication (`/auth`)
+- `POST /register` - Create a new user account.
+- `POST /login` - Authenticate a user and return a JWT.
+- `GET /me` - Get current authenticated user profile.
+- `GET /bookmarks` - Fetch the user's bookmarked laws.
+- `POST /bookmarks/:lawId` - Toggle (add/remove) a bookmark.
 
-### Token Blacklist Schema (`models/TokenBlacklist.js`)
-Maintains session security by expiring instantly upon logout.
-- `token` (The JWT string)
-- `createdAt` (Automatically expires via TTL index)
+### Laws (`/laws`)
+- `GET /` - Fetch paginated laws (supports `q`, `category`, `bailable`, `court` query strings).
+- `GET /:id` - Fetch a specific law by MongoDB `_id`.
+- `POST /` - Create a new law *(Admin only)*.
+- `PUT /:id` - Update an existing law *(Admin only)*.
+- `DELETE /:id` - Delete a law *(Admin only)*.
 
----
-
-## 📡 API Endpoints Reference
-
-### 🔐 Authentication
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/v1/auth/register` | Register a new account |
-| `POST` | `/api/v1/auth/login` | Authenticate and retrieve JWT |
-| `POST` | `/api/v1/auth/logout` | Invalidate current JWT |
-| `POST` | `/api/v1/auth/forgot-password` | Request an OTP for password reset |
-| `POST` | `/api/v1/auth/reset-password` | Reset password using verified OTP |
-| `GET` | `/api/v1/auth/profile` | Retrieve current user's profile |
-
-### 📚 Law Management
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/v1/laws` | Fetch all laws (Supports `?page`, `?limit`, `?sort`) |
-| `GET` | `/api/v1/laws/:id` | Fetch details of a specific law |
-| `POST` | `/api/v1/laws` | Create a new law (Admin only) |
-| `PATCH` | `/api/v1/laws/:id` | Update specific fields of a law (Admin only) |
-| `DELETE` | `/api/v1/laws/:id` | Delete a law permanently (Admin only) |
-| `PATCH` | `/api/v1/laws/:id/archive` | Soft-delete a law (Admin only) |
-
-### 🔍 Search & Filters
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/v1/search/laws?q=keyword` | Full-text search across laws |
-| `GET` | `/api/v1/laws/filter/category/:cat`| Fetch laws by specific category |
-| `GET` | `/api/v1/laws/filter/bailable/true`| Fetch all bailable offenses |
-
-### 📊 Analytics & Stats
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/v1/analytics/laws/by-category`| Breakdown of laws per category |
-| `GET` | `/api/v1/analytics/laws/most-viewed`| Top trending laws |
-| `GET` | `/api/v1/stats/laws/count` | Total active vs repealed laws |
+### Analytics (`/analytics`)
+- `GET /dashboard` - Fetch aggregate platform statistics *(Admin only)*.
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Setup & Installation Instructions
 
-Follow these steps to get the server running locally on your machine.
+Follow these steps to run the LexIndia project locally on your machine.
 
-### 1. Prerequisites
-Ensure you have the following installed:
-- [Node.js](https://nodejs.org/en/download/) (v18.x or higher)
-- [MongoDB](https://www.mongodb.com/try/download/community) (Local instance or an Atlas URI)
+### Prerequisites
+- **Node.js**: v18 or higher recommended.
+- **MongoDB**: A running local MongoDB server or a free MongoDB Atlas cluster URI.
 
-### 2. Clone the Repository
-```bash
-git clone https://github.com/DhruvOzha85/indian_law_penal_code_DhruvOzha85.git
-cd indian_law_penal_code_DhruvOzha85/backend
-```
+### 1. Backend Setup
+1. Open a terminal and navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install the required Node packages:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root of the `backend` folder and add the following configuration:
+   ```env
+   NODE_ENV=development
+   PORT=5000
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster0...
+   JWT_SECRET=your_super_secret_jwt_key_here
+   JWT_EXPIRE=30d
+   ```
+4. Start the backend development server (uses `nodemon` for hot-reloading):
+   ```bash
+   npm run dev
+   ```
+   *The console should indicate that the server is running on port 5000 and connected to MongoDB.*
 
-### 3. Install Dependencies
-```bash
-npm install
-```
+### 2. Frontend Setup
+1. Open a new, separate terminal and navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install the required Node packages:
+   ```bash
+   npm install
+   ```
+3. Set up the frontend environment variables. Create a `.env` file in the `frontend` folder:
+   ```env
+   VITE_API_URL=http://localhost:5000/api/v1
+   ```
+4. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
 
-### 4. Configure Environment Variables
-Create a file named `.env` in the `backend` root folder. Add the following variables, customizing them as needed:
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# Database Configuration
-MONGO_URI=mongodb://localhost:27017/indian_law_penal_code
-
-# Security (Make sure to use a strong secret in production!)
-JWT_SECRET=your_super_secret_jwt_key_12345
-JWT_EXPIRES_IN=7d
-```
-
-### 5. Seed the Database (Optional)
-If you want to start with a pre-populated database of laws, run the seed script:
-```bash
-node src/scripts/seed.js
-```
-
-### 6. Run the Server
-To start the server in development mode (which automatically restarts upon file changes using `nodemon`):
-```bash
-npm run dev
-```
-You should see a console message indicating: `MongoDB Connected...` and `Server running in development mode on port 5000`.
-
----
-
-## 🧪 Testing the API
-
-### Automated Integration Tests
-The repository includes an automated test script that validates the primary endpoints. Make sure the server is running in one terminal, then open a second terminal and run:
-```bash
-npm run test:api
-```
-
-### Manual Testing via Postman
-We have included a comprehensive Postman collection with predefined endpoints, headers, and request bodies.
-1. Open [Postman](https://www.postman.com/downloads/).
-2. Click **Import** and select the file located at: `backend/postman/indian-law-penal-code.postman_collection.json`.
-3. Ensure your local server is running.
-4. Set the `baseUrl` variable in Postman to `http://localhost:5000`.
-5. You can now execute the pre-configured `Login`, `Register`, and `Law` requests easily!
-
----
-
-<div align="center">
-<i>Designed and developed by Dhruv Ozha</i>
-</div>
+### 3. Usage & Admin Access
+1. Open your browser and navigate to `http://localhost:5173`.
+2. To test the Admin features, register a new user account via the UI.
+3. Open your MongoDB database (e.g., using MongoDB Compass) and find the newly created user in the `users` collection.
+4. Manually change the `role` field from `"user"` to `"admin"`.
+5. Refresh the website—you will now see the **Admin Dashboard** badge in the navigation bar!

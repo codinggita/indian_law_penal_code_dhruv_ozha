@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronRight, Bookmark, Share2, Scale, Clock, Edit, Trash2, Archive } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getLawById, archiveLaw, deleteLaw } from '../../api/laws.api';
@@ -9,11 +9,11 @@ import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import EmptyState from '../../components/ui/EmptyState';
-// Assuming we have ConfirmDialog, we'd import it here. We'll use a standard confirm for simplicity unless implemented.
 
 export default function LawDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { isAuthenticated, role } = useAuthStore();
 
   const { data: response, isLoading, isError, refetch } = useQuery({
@@ -23,9 +23,41 @@ export default function LawDetail() {
 
   const law = response?.data;
 
-  // Placeholder mutation for bookmarking (Requires backend endpoint)
+  const { data: bookmarksData } = useQuery({
+    queryKey: ['bookmarks'],
+    queryFn: async () => {
+      const { getBookmarks } = await import('../../api/auth.api');
+      return getBookmarks();
+    },
+    enabled: isAuthenticated
+  });
+
+  const bookmarks = bookmarksData?.data || [];
+  // bookmarks could be an array of populated Law objects or just IDs, let's handle both
+  const isBookmarked = bookmarks.some(b => b._id === id || b === id);
+
+  const bookmarkMutation = useMutation({
+    mutationFn: async () => {
+      const { toggleBookmark } = await import('../../api/auth.api');
+      return toggleBookmark(id);
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      refetch(); // Refetch law to update bookmark count
+      queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.error || 'Failed to toggle bookmark');
+    }
+  });
+
   const handleBookmark = () => {
-    toast.success('Bookmark feature coming soon!');
+    if (!isAuthenticated) {
+      toast.error('Please login to bookmark laws');
+      navigate('/login');
+      return;
+    }
+    bookmarkMutation.mutate();
   };
 
   const handleShare = () => {
@@ -127,10 +159,10 @@ export default function LawDetail() {
           <div className="flex items-center space-x-4">
             <button 
               onClick={handleBookmark}
-              className="flex items-center space-x-2 text-text-secondary hover:text-primary transition-colors"
+              className={`flex items-center space-x-2 transition-colors ${isBookmarked ? 'text-primary' : 'text-text-secondary hover:text-primary'}`}
             >
-              <Bookmark className="w-5 h-5" />
-              <span className="font-medium text-sm">Bookmark</span>
+              <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-current' : ''}`} />
+              <span className="font-medium text-sm">{isBookmarked ? 'Bookmarked' : 'Bookmark'}</span>
             </button>
             <button 
               onClick={handleShare}

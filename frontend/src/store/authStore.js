@@ -5,7 +5,7 @@ export const useAuthStore = create((set) => ({
   token: localStorage.getItem('token') || null,
   isAuthenticated: !!localStorage.getItem('token'),
   role: null,
-  login: (user, token) => {
+  setAuth: (user, token) => {
     localStorage.setItem('token', token);
     set({ user, token, isAuthenticated: true, role: user?.role || 'user' });
   },

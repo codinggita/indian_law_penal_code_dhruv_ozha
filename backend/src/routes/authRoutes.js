@@ -11,7 +11,9 @@ const {
   verifyEmail,
   sendOTP,
   verifyOTP,
-  sessions
+  sessions,
+  toggleBookmark,
+  getBookmarks
 } = require('../controllers/authController');
 const { protect } = require('../middlewares/authMiddleware');
 
@@ -33,5 +35,8 @@ router.route('/profile')
   .patch(protect, updateProfile);
 router.post('/change-password', protect, changePassword);
 router.get('/sessions', protect, sessions);
+router.route('/bookmarks')
+  .get(protect, getBookmarks);
+router.post('/bookmarks/:lawId', protect, toggleBookmark);
 
 module.exports = router;

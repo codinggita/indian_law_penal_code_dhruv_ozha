@@ -1,32 +1,67 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+:root {
+  --theme-primary: #C8410B;
+  --theme-primary-light: #F26522;
+  --theme-primary-hover: #A33408;
+  --theme-accent: #1B7A4A;
+  --theme-accent-light: #27AE60;
+
+  --theme-bg: #FAFAF7;
+  --theme-surface: #FFFFFF;
+  --theme-surface-2: #F5F3EE;
+  --theme-border: #E2DDD5;
+
+  --theme-text-primary: #1A1A1A;
+  --theme-text-secondary: #5A5550;
+  --theme-text-muted: #9A948D;
+
+  --theme-error: #D93025;
+  --theme-warning: #E67E22;
+  --theme-info: #0077B6;
+  --theme-success: #1B7A4A;
+  --theme-gold: #C9A84C;
+}
+
+.dark {
+  --theme-bg: #121212;
+  --theme-surface: #1E1E1E;
+  --theme-surface-2: #2A2A2A;
+  --theme-border: #3A3A3A;
+
+  --theme-text-primary: #F5F5F5;
+  --theme-text-secondary: #A0A0A0;
+  --theme-text-muted: #6B6B6B;
+}
+
+@theme {
+  --color-primary: var(--theme-primary);
+  --color-primary-light: var(--theme-primary-light);
+  --color-primary-hover: var(--theme-primary-hover);
+  --color-accent: var(--theme-accent);
+  --color-accent-light: var(--theme-accent-light);
+
+  --color-bg: var(--theme-bg);
+  --color-surface: var(--theme-surface);
+  --color-surface-2: var(--theme-surface-2);
+  --color-border: var(--theme-border);
+
+  --color-text-primary: var(--theme-text-primary);
+  --color-text-secondary: var(--theme-text-secondary);
+  --color-text-muted: var(--theme-text-muted);
+
+  --color-error: var(--theme-error);
+  --color-warning: var(--theme-warning);
+  --color-info: var(--theme-info);
+  --color-success: var(--theme-success);
+
+  --color-gold: var(--theme-gold);
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Inter", sans-serif;
+}
 
 @layer base {
-  :root {
-    --color-primary: #C8410B;
-    --color-primary-light: #F26522;
-    --color-primary-hover: #A33408;
-    --color-accent: #1B7A4A;
-    --color-accent-light: #27AE60;
-
-    --color-bg: #FAFAF7;
-    --color-surface: #FFFFFF;
-    --color-surface-2: #F5F3EE;
-    --color-border: #E2DDD5;
-
-    --color-text-primary: #1A1A1A;
-    --color-text-secondary: #5A5550;
-    --color-text-muted: #9A948D;
-
-    --color-error: #D93025;
-    --color-warning: #E67E22;
-    --color-info: #0077B6;
-    --color-success: #1B7A4A;
-
-    --color-gold: #C9A84C;
-  }
-
   body {
     @apply bg-bg text-text-secondary font-body antialiased;
   }

@@ -157,7 +157,9 @@ export default function Landing() {
                 className="flex items-center p-4 bg-surface-2 border border-border rounded-lg hover:border-primary hover:shadow-sm transition-all text-left border-l-4 border-l-primary"
               >
                 <div className="flex-1">
-                  <h4 className="font-medium text-text-primary">{cat} Law</h4>
+                  <h4 className="font-medium text-text-primary">
+                    {cat.endsWith('Law') ? cat : `${cat} Law`}
+                  </h4>
                   <p className="text-xs text-text-muted mt-1">Explore section</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-text-muted opacity-50" />

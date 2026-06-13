@@ -11,11 +11,21 @@ export const register = async (userData) => {
 };
 
 export const logout = async () => {
-  const response = await axiosInstance.get('/auth/logout');
+  const response = await axiosInstance.post('/auth/logout');
   return response.data;
 };
 
 export const getProfile = async () => {
-  const response = await axiosInstance.get('/auth/me');
+  const response = await axiosInstance.get('/auth/profile');
+  return response.data;
+};
+
+export const getBookmarks = async () => {
+  const response = await axiosInstance.get('/auth/bookmarks');
+  return response.data;
+};
+
+export const toggleBookmark = async (lawId) => {
+  const response = await axiosInstance.post(`/auth/bookmarks/${lawId}`);
   return response.data;
 };

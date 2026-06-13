@@ -1,23 +1,31 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { ErrorBoundary } from 'react-error-boundary';
+
 import ToastProvider from './components/ui/ToastProvider';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PageWrapper from './components/layout/PageWrapper';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import Landing from './pages/Landing';
-import LawsList from './pages/laws/LawsList';
-import LawDetail from './pages/laws/LawDetail';
-import LawSearch from './pages/laws/LawSearch';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import ResetPassword from './pages/auth/ResetPassword';
-import Profile from './pages/user/Profile';
-import AdminLayout from './pages/admin/AdminLayout';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminAddLaw from './pages/admin/AdminAddLaw';
-import AdminEditLaw from './pages/admin/AdminEditLaw';
-import AdminUsers from './pages/admin/AdminUsers';
+import Spinner from './components/ui/Spinner';
+import GlobalErrorFallback from './components/ui/GlobalErrorFallback';
+
+// Lazy loaded pages
+const Landing = lazy(() => import('./pages/Landing'));
+const LawsList = lazy(() => import('./pages/laws/LawsList'));
+const LawDetail = lazy(() => import('./pages/laws/LawDetail'));
+const LawSearch = lazy(() => import('./pages/laws/LawSearch'));
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'));
+const Profile = lazy(() => import('./pages/user/Profile'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminAddLaw = lazy(() => import('./pages/admin/AdminAddLaw'));
+const AdminEditLaw = lazy(() => import('./pages/admin/AdminEditLaw'));
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 
 function Placeholder({ name }) {
   return (
@@ -31,57 +39,68 @@ function Placeholder({ name }) {
 
 function App() {
   return (
-    <div className="min-h-screen bg-bg flex flex-col">
-      <ToastProvider />
-      <Navbar />
-      
-      <main className="flex-1 flex flex-col pt-16">
-        <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        
-        {/* Laws Routes */}
-        <Route path="/laws" element={<LawsList />} />
-        <Route path="/laws/:id" element={<LawDetail />} />
-        <Route path="/search" element={<LawSearch />} />
-        
-        {/* Protected Routes */}
-        <Route 
-          path="/profile" 
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          } 
-        />
-        {/* Admin Routes */}
-        <Route 
-          path="/admin" 
-          element={
-            <ProtectedRoute adminOnly>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
-          <Route path="laws/new" element={<AdminAddLaw />} />
-          <Route path="laws/:id/edit" element={<AdminEditLaw />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="analytics" element={<Placeholder name="Admin Analytics" />} />
-          <Route path="logs" element={<Placeholder name="System Logs" />} />
-        </Route>
-        
-        {/* Fallback */}
-        <Route path="*" element={<Placeholder name="404 Not Found" />} />
-        </Routes>
-      </main>
-      
-      <Footer />
-    </div>
+    <HelmetProvider>
+      <ErrorBoundary fallbackRender={GlobalErrorFallback}>
+        <div className="min-h-screen bg-bg flex flex-col text-text-primary">
+          <ToastProvider />
+          <Navbar />
+          
+          <main className="flex-1 flex flex-col pt-16">
+            <Suspense fallback={
+              <div className="flex-1 flex items-center justify-center py-32">
+                <Spinner size="lg" />
+              </div>
+            }>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                
+                {/* Laws Routes */}
+                <Route path="/laws" element={<LawsList />} />
+                <Route path="/laws/:id" element={<LawDetail />} />
+                <Route path="/search" element={<LawSearch />} />
+                
+                {/* Protected Routes */}
+                <Route 
+                  path="/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Admin Routes */}
+                <Route 
+                  path="/admin" 
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <AdminLayout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="laws/new" element={<AdminAddLaw />} />
+                  <Route path="laws/:id/edit" element={<AdminEditLaw />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="analytics" element={<Placeholder name="Admin Analytics" />} />
+                  <Route path="logs" element={<Placeholder name="System Logs" />} />
+                </Route>
+                
+                {/* Fallback */}
+                <Route path="*" element={<Placeholder name="404 Not Found" />} />
+              </Routes>
+            </Suspense>
+          </main>
+          
+          <Footer />
+        </div>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }
 

@@ -16,12 +16,27 @@ export default function LawSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
   
-  const [filters, setFilters] = useState({
-    categories: searchParams.getAll('category'),
-    court: searchParams.get('court') || '',
-    bailable: searchParams.get('bailable') || '',
-    cognizable: searchParams.get('cognizable') || '',
+  const [filters, setFilters] = useState(() => {
+    if (searchParams.getAll('category').length > 0 || searchParams.get('court') || searchParams.get('bailable') || searchParams.get('cognizable')) {
+      return {
+        categories: searchParams.getAll('category'),
+        court: searchParams.get('court') || '',
+        bailable: searchParams.get('bailable') || '',
+        cognizable: searchParams.get('cognizable') || '',
+      };
+    }
+    try {
+      const stored = sessionStorage.getItem('lawSearchFilters');
+      if (stored) return JSON.parse(stored);
+    } catch {
+      // Ignore
+    }
+    return { categories: [], court: '', bailable: '', cognizable: '' };
   });
+
+  useEffect(() => {
+    sessionStorage.setItem('lawSearchFilters', JSON.stringify(filters));
+  }, [filters]);
 
   const page = parseInt(searchParams.get('page') || '1', 10);
 

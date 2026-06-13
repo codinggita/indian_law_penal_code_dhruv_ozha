@@ -33,8 +33,8 @@ export default function Register() {
 
   const registerMutation = useMutation({
     mutationFn: registerApi,
-    onSuccess: (data) => {
-      setAuth(data.user, data.token);
+    onSuccess: (responsePayload) => {
+      setAuth(responsePayload.data.user, responsePayload.data.token);
       toast.success('Account created successfully!');
       navigate('/');
     },
