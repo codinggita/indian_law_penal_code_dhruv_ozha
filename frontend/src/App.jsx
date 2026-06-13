@@ -13,6 +13,8 @@ import Register from './pages/auth/Register';
 import Profile from './pages/user/Profile';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminAddLaw from './pages/admin/AdminAddLaw';
+import AdminEditLaw from './pages/admin/AdminEditLaw';
 
 function Placeholder({ name }) {
   return (
@@ -52,6 +54,7 @@ function App() {
               <Profile />
             </ProtectedRoute>
           } 
+        />
         {/* Admin Routes */}
         <Route 
           path="/admin" 
@@ -62,8 +65,8 @@ function App() {
           }
         >
           <Route index element={<AdminDashboard />} />
-          <Route path="laws/new" element={<Placeholder name="Add Law" />} />
-          <Route path="laws/:id/edit" element={<Placeholder name="Edit Law" />} />
+          <Route path="laws/new" element={<AdminAddLaw />} />
+          <Route path="laws/:id/edit" element={<AdminEditLaw />} />
           <Route path="users" element={<Placeholder name="Admin Users" />} />
           <Route path="analytics" element={<Placeholder name="Admin Analytics" />} />
           <Route path="logs" element={<Placeholder name="System Logs" />} />
