@@ -6,6 +6,7 @@ import PageWrapper from './components/layout/PageWrapper';
 import Landing from './pages/Landing';
 import LawsList from './pages/laws/LawsList';
 import LawDetail from './pages/laws/LawDetail';
+import LawSearch from './pages/laws/LawSearch';
 
 function Placeholder({ name }) {
   return (
@@ -35,7 +36,7 @@ function App() {
         {/* Laws Routes */}
         <Route path="/laws" element={<LawsList />} />
         <Route path="/laws/:id" element={<LawDetail />} />
-        <Route path="/search" element={<Placeholder name="Search Laws" />} />
+        <Route path="/search" element={<LawSearch />} />
         
         {/* Protected Routes */}
         <Route path="/profile" element={<Placeholder name="User Profile" />} />
