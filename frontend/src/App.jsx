@@ -11,6 +11,8 @@ import LawSearch from './pages/laws/LawSearch';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Profile from './pages/user/Profile';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 function Placeholder({ name }) {
   return (
@@ -50,15 +52,22 @@ function App() {
               <Profile />
             </ProtectedRoute>
           } 
-        />
-        
         {/* Admin Routes */}
-        <Route path="/admin" element={<ProtectedRoute adminOnly><Placeholder name="Admin Dashboard" /></ProtectedRoute>} />
-        <Route path="/admin/laws/new" element={<ProtectedRoute adminOnly><Placeholder name="Add Law" /></ProtectedRoute>} />
-        <Route path="/admin/laws/:id/edit" element={<ProtectedRoute adminOnly><Placeholder name="Edit Law" /></ProtectedRoute>} />
-        <Route path="/admin/users" element={<ProtectedRoute adminOnly><Placeholder name="Admin Users" /></ProtectedRoute>} />
-        <Route path="/admin/analytics" element={<ProtectedRoute adminOnly><Placeholder name="Admin Analytics" /></ProtectedRoute>} />
-        <Route path="/admin/logs" element={<ProtectedRoute adminOnly><Placeholder name="System Logs" /></ProtectedRoute>} />
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="laws/new" element={<Placeholder name="Add Law" />} />
+          <Route path="laws/:id/edit" element={<Placeholder name="Edit Law" />} />
+          <Route path="users" element={<Placeholder name="Admin Users" />} />
+          <Route path="analytics" element={<Placeholder name="Admin Analytics" />} />
+          <Route path="logs" element={<Placeholder name="System Logs" />} />
+        </Route>
         
         {/* Fallback */}
         <Route path="*" element={<Placeholder name="404 Not Found" />} />
