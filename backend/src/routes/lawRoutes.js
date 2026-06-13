@@ -43,6 +43,7 @@ router.patch('/:id/restore', protect, authorize('admin'), restoreLaw);
 
 router.route('/:id')
   .get(getLawById)
+  .put(protect, authorize('admin'), updateLaw)
   .patch(protect, authorize('admin'), updateLaw)
   .delete(protect, authorize('admin'), deleteLaw);
 

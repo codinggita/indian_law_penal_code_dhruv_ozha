@@ -138,6 +138,7 @@ exports.filterByBailable = asyncHandler(async (req, res, next) => listByFilters(
 exports.filterByCognizable = asyncHandler(async (req, res, next) => listByFilters(req, res, next, { cognizable: req.params.value === 'true' }));
 exports.filterByChapter = asyncHandler(async (req, res, next) => listByFilters(req, res, next, { chapter: req.params.chapterId }));
 exports.filterBySection = asyncHandler(async (req, res, next) => listByFilters(req, res, next, { sectionNumber: req.params.sectionNumber }));
+exports.filterByPunishmentType = asyncHandler(async (req, res, next) => listByFilters(req, res, next, { punishmentType: req.params.type }));
 
 exports.getLawById = asyncHandler(async (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {

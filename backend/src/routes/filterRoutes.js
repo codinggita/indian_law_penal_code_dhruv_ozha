@@ -8,7 +8,10 @@ const {
   filterByStatus,
   filterByCategory,
   filterByBailable,
-  filterByCognizable
+  filterByCognizable,
+  filterByPunishmentType,
+  getRecentLaws,
+  getTrendingLaws
 } = require('../controllers/lawController');
 
 const router = express.Router();
@@ -22,6 +25,9 @@ router.get('/status/:status', filterByStatus);
 router.get('/category/:category', filterByCategory);
 router.get('/bailable/:value', filterByBailable);
 router.get('/cognizable/:value', filterByCognizable);
+router.get('/punishment/:type', filterByPunishmentType);
+router.get('/recent', getRecentLaws);
+router.get('/trending', getTrendingLaws);
 
 // Additional specific filters requested in specifications
 router.get('/high-importance', (req, res, next) => {
