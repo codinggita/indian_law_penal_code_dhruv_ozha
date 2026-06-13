@@ -10,11 +10,14 @@ import LawDetail from './pages/laws/LawDetail';
 import LawSearch from './pages/laws/LawSearch';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import Profile from './pages/user/Profile';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminAddLaw from './pages/admin/AdminAddLaw';
 import AdminEditLaw from './pages/admin/AdminEditLaw';
+import AdminUsers from './pages/admin/AdminUsers';
 
 function Placeholder({ name }) {
   return (
@@ -38,8 +41,8 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<Placeholder name="Forgot Password" />} />
-        <Route path="/reset-password" element={<Placeholder name="Reset Password" />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         
         {/* Laws Routes */}
         <Route path="/laws" element={<LawsList />} />
@@ -67,7 +70,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="laws/new" element={<AdminAddLaw />} />
           <Route path="laws/:id/edit" element={<AdminEditLaw />} />
-          <Route path="users" element={<Placeholder name="Admin Users" />} />
+          <Route path="users" element={<AdminUsers />} />
           <Route path="analytics" element={<Placeholder name="Admin Analytics" />} />
           <Route path="logs" element={<Placeholder name="System Logs" />} />
         </Route>
