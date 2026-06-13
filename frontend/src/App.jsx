@@ -4,6 +4,8 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import PageWrapper from './components/layout/PageWrapper';
 import Landing from './pages/Landing';
+import LawsList from './pages/laws/LawsList';
+import LawDetail from './pages/laws/LawDetail';
 
 function Placeholder({ name }) {
   return (
@@ -31,8 +33,8 @@ function App() {
         <Route path="/reset-password" element={<Placeholder name="Reset Password" />} />
         
         {/* Laws Routes */}
-        <Route path="/laws" element={<Placeholder name="Browse Laws" />} />
-        <Route path="/laws/:id" element={<Placeholder name="Law Detail" />} />
+        <Route path="/laws" element={<LawsList />} />
+        <Route path="/laws/:id" element={<LawDetail />} />
         <Route path="/search" element={<Placeholder name="Search Laws" />} />
         
         {/* Protected Routes */}
