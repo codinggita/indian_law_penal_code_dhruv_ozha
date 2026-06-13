@@ -1,15 +1,27 @@
 import { Routes, Route } from 'react-router-dom';
 import ToastProvider from './components/ui/ToastProvider';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import PageWrapper from './components/layout/PageWrapper';
 
 function Placeholder({ name }) {
-  return <div className="p-8 text-2xl font-display">{name}</div>;
+  return (
+    <PageWrapper title={name}>
+      <div className="p-8 text-2xl font-display text-center bg-surface border border-border rounded-lg shadow-sm">
+        {name} View
+      </div>
+    </PageWrapper>
+  );
 }
 
 function App() {
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="min-h-screen bg-bg flex flex-col">
       <ToastProvider />
-      <Routes>
+      <Navbar />
+      
+      <main className="flex-1 flex flex-col pt-16">
+        <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Placeholder name="Landing Page" />} />
         <Route path="/login" element={<Placeholder name="Login Page" />} />
@@ -35,7 +47,10 @@ function App() {
         
         {/* Fallback */}
         <Route path="*" element={<Placeholder name="404 Not Found" />} />
-      </Routes>
+        </Routes>
+      </main>
+      
+      <Footer />
     </div>
   );
 }
