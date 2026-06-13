@@ -7,6 +7,8 @@ import Landing from './pages/Landing';
 import LawsList from './pages/laws/LawsList';
 import LawDetail from './pages/laws/LawDetail';
 import LawSearch from './pages/laws/LawSearch';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 
 function Placeholder({ name }) {
   return (
@@ -28,8 +30,8 @@ function App() {
         <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Placeholder name="Login Page" />} />
-        <Route path="/register" element={<Placeholder name="Register Page" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<Placeholder name="Forgot Password" />} />
         <Route path="/reset-password" element={<Placeholder name="Reset Password" />} />
         
