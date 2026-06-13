@@ -2,7 +2,8 @@
 
 LexIndia is a comprehensive, API-driven web application designed to simplify the Indian Penal Code and make complex laws easily accessible to everyone. It includes a user-facing law directory, an advanced search engine, and a fully functional Admin Dashboard for managing legal records, analytics, and platform users.
 
-![LexIndia Project Banner](https://via.placeholder.com/1200x400/121212/F26522?text=LexIndia+-+Indian+Law+Reference+Platform)
+<!-- Note to developer: Add a screenshot of your project here by uploading an image to GitHub and pasting the link below -->
+<!-- ![LexIndia Screenshot](YOUR_IMAGE_LINK_HERE) -->
 
 ---
 
